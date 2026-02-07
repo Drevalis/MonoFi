@@ -15,5 +15,6 @@ Using it on unauthorized networks may be illegal in your country – **use respo
 
 - Linux-based system 
 - `aircrack-ng` suite installed  
-- `airgraph-ng` installed  
+- `airgraph-ng` installed
+- Compile it on your own!
 
