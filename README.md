@@ -1,4 +1,4 @@
-# WLAN Automation Toolkit (Python Script)
+# Wifi Automation Tool
 
 > This tool uses utilities from the `aircrack-ng` suite (like `airmon-ng`, `airodump-ng`, `aireplay-ng`, and more).  
 > It is intended for **educational purposes only**.
