@@ -5,8 +5,9 @@
 #include <sys/wait.h>
 #include <ctime>
 #include <vector>
+#include <fstream>
+#include <thread>
 using namespace std;
-
 
 void run_cmd(const vector<string>& args) {
     pid_t pid = fork();
@@ -26,7 +27,6 @@ void run_cmd(const vector<string>& args) {
     }
 }
 
-
 class shortcuts_settings_backend{
     public:
 
@@ -43,6 +43,10 @@ class shortcuts_settings_backend{
                 "airmon-ng",
                 });
         };
+        void sleeps(int time) {
+            this_thread::sleep_for(chrono::seconds(time));
+
+        }
         
  };
 shortcuts_settings_backend bs;
@@ -73,11 +77,26 @@ class input_vars {
         string airbase_channel;
         string airgraph_csv;
         string airgraph_outputname;
+        string add_interface;
+        string auto_interface;
+        string selection_interface;
+        int interface_menu_selection;
 };
 
 class backend_settings:public input_vars {
     public:
-        string interface = "wlan1";
+
+        bool get_interface() {
+            ifstream file("util/interface.dat");
+            string auto_interface_check;
+
+            while(getline(file, auto_interface_check))
+            { 
+             };
+            interface = auto_interface_check;
+            return true;
+        }
+        string interface;
         int start_interface_1() {
             bs.clear();
             system("sudo airmon-ng");
@@ -88,7 +107,7 @@ class backend_settings:public input_vars {
                 "airmon-ng",
                 "start",
                 interface_start});
-            sleep(1);
+            bs.sleeps(1);
             return 0;
         }
 
@@ -103,7 +122,7 @@ class backend_settings:public input_vars {
                 "stop",
                 interface_stop,
             });
-            sleep(1);
+            bs.sleeps(1);
             return 0;
         }
 
@@ -127,7 +146,7 @@ class backend_settings:public input_vars {
                 "check",
                 "kill",
             });
-            sleep(3);
+            bs.sleeps(1);
             return 0;
         }
 
@@ -149,14 +168,53 @@ class backend_settings:public input_vars {
             return 0;
         }
         int select_interface_6() {
-            cout << "COMING";
+            cout << "-> ";
+            cin >> interface_menu_selection;
+
+            switch (interface_menu_selection)
+            {
+            case 1: {
+                ofstream autointefacefile_write("util/interface.dat");
+                if (!autointefacefile_write) {
+                        cout << "inteface.dat file could not open (write)";
+                        return 1;
+                    }
+                bs.clear();
+                bs.airmon_ng();
+                cout << "Enter the name of the Interface: ";
+                cin >> auto_interface;
+
+                autointefacefile_write << auto_interface;
+                autointefacefile_write.close();
+                break;
+            }
+            case 2: {
+                string name;
+                ifstream file_read("util/interface.dat", ios::app);
+                if (!file_read) {
+                        cout << "interface.dat file could not open (read)";
+                        return 1;
+                    }
+            
+                bs.clear();
+                while (getline(file_read,name)) {
+                    cout << "- " << name << endl;
+                }
+                file_read.close();
+                cout << "anything for menu: ";
+                cin >> enter_var;
+                break;
+            }
+
+            default:
+                break;
+            }
             return 0;
         }
         int show_networks_7() {
             bs.clear();
             if (interface.empty()){
-                cout << "No interface selected!";
-                sleep(3);
+                cout << "[No Interface selected!]";
                 return 1;
             };
             run_cmd({
@@ -172,8 +230,7 @@ class backend_settings:public input_vars {
         int targeted_monitoring_8() {
             bs.clear();
             if (interface.empty()){
-                cout << "No interface selected!";
-                sleep(3);
+                cout << "[No Interface selected!]";
                 return 1;
             };
             cout << "Enter MAC: ";
@@ -204,8 +261,7 @@ class backend_settings:public input_vars {
         int endless_deauth_9() {
             bs.clear();
             if (interface.empty()){
-                cout << "No interface selected!";
-                sleep(3);
+                cout << "[No Interface selected!]";
                 return 1;
             };
             cout << "Enter MAC: ";
@@ -228,8 +284,7 @@ class backend_settings:public input_vars {
         int deauth_attack_10() {
             bs.clear();
             if (interface.empty()){
-                cout << "No interface selected!";
-                sleep(3);
+                cout << "[No Interface selected!]";
                 return 1;
             };
             cout << "Enter how many packages: ";
@@ -250,9 +305,8 @@ class backend_settings:public input_vars {
 
         int targe_against_clinet_11() {
             bs.clear();
-            if (interface.empty()) {
-                cout << "No interface selected!";
-                sleep(3);
+            if (interface.empty()){
+                cout << "[No Interface selected!]";
                 return 1;
             };
             cout << "Enter MAC: ";
@@ -300,15 +354,15 @@ class backend_settings:public input_vars {
                 "-w",
                 y
             });
+            cout << "Anything for menu: ";
             cin >> enter_var;
             return 0;
         }
 
         int fake_access_point_13() {
             bs.clear();
-            if (interface.empty()) {
-                cout << "No interface selected!";
-                sleep(3);
+            if (interface.empty()){
+                cout << "[No Interface selected!]";
                 return 1;
             };
             cout << "Create Wifi name: ";
@@ -356,9 +410,8 @@ class backend_settings:public input_vars {
 
         int displays_wpa_capable_15() {
             bs.clear();
-            if (interface.empty()) {
-                cout << "No interface selected!";
-                sleep(3);
+            if (interface.empty()){
+                cout << "[No Interface selected!]";
                 return 1;
             };
             run_cmd({
