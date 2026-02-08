@@ -5,7 +5,9 @@ using namespace std;
 int main(){
     int input;
     while (true) {
+        backend.get_interface();
         menu.menu_show();
+        
         cout << "-> ";
         cin >> input;
         
@@ -27,6 +29,8 @@ int main(){
             backend.start_interface_channel_5();
             break;
         case 6:
+            bs.clear();
+            menu.interface_menu();
             backend.select_interface_6();
             break;
         case 7:
