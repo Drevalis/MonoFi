@@ -21,7 +21,8 @@ shortcuts_settings_ui us;
 
 class menu_ui{
     public:
-        string banner = R"(                         		             ⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀
+        string banner = R"(
+                            	                     ⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀
 			    	                   ⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀
 .##...##...####...##..##...####...######..######. ⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀
 .###.###..##..##..###.##..##..##..##........##... ⠀⣀⣠⣿⣷⣴⣶⣶⣶⣶⣿⣿⣿⣿⣶⣶⣶⣶⣶⣿⣧⣀⣀⠀
@@ -70,6 +71,14 @@ class menu_ui{
             cout << "[10] Deauthentication attack                " << "[17] Settings" << endl;
             cout << "[11] Targeted against specific client       " << "[18] Exit" << endl;
             us.space();
+            return 0;
+        }
+
+        int interface_menu() {
+            cout << "Interface" << endl;
+            cout << "[1] Select an interfaces" << endl;
+            cout << "[2] Show current auto interface" << endl;
+            
             return 0;
         }
 
